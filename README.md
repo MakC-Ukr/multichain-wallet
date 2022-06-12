@@ -64,7 +64,7 @@ As a result the private key for a solana wallet is 64 bytes long, and 32 bytes l
 
 For generating the solana private key, the follwoign code is used
 ```
-solana-keygen new --outfile
+solana-keygen new --outfile {outfile_address}
 ```
 
 Once the key is generate it is hashed and converted to 32 bytes string using [keccak256](https://www.npmjs.com/package/keccak256) library.
