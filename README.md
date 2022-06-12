@@ -1,3 +1,4 @@
+
 # A multi-chain wallet
 
 ## Public-private key cryptography
@@ -56,3 +57,8 @@ solana-keygen pubkey ASK
 
 The problem statement for the repository is that many gamers play games on different chains. Strong the seed phrases for each of the wallets that [MetaMask](https://metamask.io), [Phantom](https://phantom.app) or [Atomic Wallet](https://atomicwallet.io) wallet generates. We will now try to solve this problem by generating only a single seed phrase for the gamer to store. The tension for the gamers can be further simplified by a creation a semi-custodian wallet.
 
+We will start with managing keys for our users on Solana and EVM chains (like Polygon) for beginning. Each user's wallet on these chains will have a private key associated with it. Solana and Ethereum are not perfectly compatible since they use different cryptographic curves. Solana uses the ed25519 curve for its accounts / keypairs, whereas Ethereum uses the secp256k1 curve (as discussed earlier).
+
+As a result the private key for a solana wallet is 64 bytes long, and 32 bytes long for an EVM-based wallet. First is we generate a 64-byte long wallet for Solana and extract a 32 byte long key for EVM by hashing the Solana private key 2<sup>16</sup> times with keccak-256 algorithm. As a result we now own two private keys for a single user. The two private keys are saved locally/pushed to our servers. The user, on the other hand will now be able to log into his wallet (the frontend for that is in the current repo) by using his email-id and password. In case the gamer wishes to transfer the private keys to himself, he can extract it from the frontend app and use the conventional wallets separately for each chain.
+
+==Note== that for safety purposes, the mnemonic generated is not stored anywhere since storing a single hex string mitigates the process and ensures higher security of the wallets.
