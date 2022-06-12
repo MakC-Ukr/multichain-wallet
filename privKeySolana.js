@@ -3,6 +3,8 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const keccak = require('keccak256');
+const privateKeyToAddress = require('ethereum-private-key-to-address');
+let solWeb3 = require('@solana/web3.js');
 
 var connectedAccount = "0x123455678";
 var timeNow = new Date().getTime().toString();
@@ -11,7 +13,6 @@ var solPrivKeyLoc = './generated-wallets/wallet-'+timeSlice+ '/my-keypair.json';
 console.log({solPrivKeyLoc});
 
 const output1 = execSync('solana-keygen new --outfile ' + solPrivKeyLoc, { encoding: 'utf-8' });
-console.log(output1);
 
 fs.readFile(solPrivKeyLoc, 'utf8', (err, jsonString) => {
 
@@ -50,17 +51,25 @@ fs.readFile(solPrivKeyLoc, 'utf8', (err, jsonString) => {
         strEVM = strEVM = keccak(strEVM).toString('hex');
     }
 
+    // generate the public addresses for Solana and EVM
+
+    let addrEVM = privateKeyToAddress(strEVM);
+    let solPrivKeyF32 = solPrivKey.slice(0,32);
+    let firstWinWallet = solWeb3.Keypair.fromSeed(Uint8Array.from(solPrivKeyF32));
+    let solAddress =firstWinWallet.publicKey.toString();
+
     let allData = { 
         account: connectedAccount,
         solPrivKey: strSolana, 
+        solAddress: solAddress,
         evmPrivKey: strEVM,
+        evmAddress: addrEVM,
         timestamp: timeNow
     };
         
+
+    // Save all data is a JSON file in "accounts" folder
     let data = JSON.stringify(allData);
-
-    
-
     fs.writeFileSync('accounts/' + connectedAccount+'.json', data);
     fs.unlinkSync(solPrivKeyLoc);
 })
