@@ -73,3 +73,8 @@ Note that for safety purposes, the mnemonic generated is not stored anywhere sin
 
 
 ### Generating public keys
+The addresses for the wllaets can now be easily generated using npm libraries: `@ethereum-private-key-to-address` and `@solana/web3.js`. 
+
+## Storing the result
+
+The result is stored in a JSON file in accounts folder, and will be displayed on the frontend side as well.
